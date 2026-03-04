@@ -21,7 +21,14 @@ export function HeroSection() {
         </div>
 
         <div className="relative">
-          <Image src="/images/placeholder.svg" alt="Young athletes training" width={720} height={520} className="w-full rounded-3xl border border-border shadow-xl" priority />
+          <Image
+            src="/images/hero-youth-sports-collage.png"
+            alt="Young athletes playing soccer, baseball, and basketball"
+            width={1536}
+            height={1024}
+            className="w-full rounded-3xl border border-border shadow-xl"
+            priority
+          />
           <div className="absolute -left-4 bottom-5 rounded-xl border border-border bg-card p-3 shadow-lg">
             <p className="text-xs text-muted-foreground">Programs Supported</p>
             <p className="text-xl font-bold">126</p>

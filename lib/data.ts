@@ -42,7 +42,7 @@ export const homeSteps = [
   },
   {
     title: "Funds Reach Programs",
-    description: "Proceeds are allocated to verified clinics and tournaments with transparent tracking.",
+    description: "Proceeds are allocated to clinics and tournaments.",
     icon: Shield,
   },
   {
@@ -118,7 +118,7 @@ export const programs: Program[] = [
 export type Product = {
   id: string;
   name: string;
-  category: "Hoodie" | "T-Shirt" | "Cap" | "Bottle" | "Bag";
+  category: "Hoodie" | "T-Shirt";
   price: number;
   image: string;
   colors: string[];
@@ -126,108 +126,332 @@ export type Product = {
   description: string;
 };
 
-export const products: Product[] = [
+export type ArtworkCollection = {
+  id: string;
+  artworkName: string;
+  sport: "Basketball" | "Softball" | "Football" | "Hockey" | "Soccer";
+  description: string;
+  tshirt: Product;
+  hoodie: Product;
+};
+
+const merchSizes = ["S", "M", "L", "XL", "2XL", "3XL", "4XL"];
+
+export const artworkCollections: ArtworkCollection[] = [
   {
-    id: "hoodie-navy",
-    name: "Team Legacy Hoodie",
-    category: "Hoodie",
-    price: 58,
-    image: "/images/placeholder.svg",
-    colors: ["Navy", "Gray"],
-    sizes: ["S", "M", "L", "XL"],
-    description: "Heavyweight hoodie with embroidered Sports Our Youth crest.",
+    id: "play-like-girl",
+    artworkName: "Play Like A Girl",
+    sport: "Softball",
+    description: "Retro gradient softball art with bold game-day energy.",
+    tshirt: {
+      id: "play-like-girl-tee",
+      name: "Play Like A Girl Street Tee",
+      category: "T-Shirt",
+      price: 32,
+      image: "/images/store-artworks/play-like-girl-tee.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Soft cotton tee with full-front Play Like A Girl print.",
+    },
+    hoodie: {
+      id: "play-like-girl-hoodie",
+      name: "Play Like A Girl Night Hoodie",
+      category: "Hoodie",
+      price: 50,
+      image: "/images/store-artworks/play-like-girl-hoodie.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Pullover hoodie featuring the same vivid softball artwork.",
+    },
   },
   {
-    id: "shirt-core",
-    name: "Core Supporter Tee",
-    category: "T-Shirt",
-    price: 28,
-    image: "/images/placeholder.svg",
-    colors: ["White", "Navy", "Green"],
-    sizes: ["S", "M", "L", "XL"],
-    description: "Soft everyday tee designed for game day and volunteer events.",
+    id: "softball-girl-neon",
+    artworkName: "Softball Girl Neon",
+    sport: "Softball",
+    description: "Clean varsity lettering with a bright neon pop.",
+    tshirt: {
+      id: "softball-girl-neon-tee",
+      name: "Softball Girl Glow Tee",
+      category: "T-Shirt",
+      price: 32,
+      image: "/images/store-artworks/softball-girl-neon-tee.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Classic fit tee with Softball Girl neon print.",
+    },
+    hoodie: {
+      id: "softball-girl-neon-hoodie",
+      name: "Softball Girl Glow Hoodie",
+      category: "Hoodie",
+      price: 50,
+      image: "/images/store-artworks/softball-girl-neon-hoodie.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Premium hoodie with the Softball Girl neon chest artwork.",
+    },
   },
   {
-    id: "cap-classic",
-    name: "Classic Sideline Cap",
-    category: "Cap",
-    price: 24,
-    image: "/images/placeholder.svg",
-    colors: ["Navy", "Black"],
-    sizes: ["One Size"],
-    description: "Structured cap with breathable mesh back and stitched logo.",
+    id: "orange-arc",
+    artworkName: "Orange Arc Mark",
+    sport: "Softball",
+    description: "Minimal orange mark inspired by softball motion and speed.",
+    tshirt: {
+      id: "orange-arc-tee",
+      name: "Orange Arc Signature Tee",
+      category: "T-Shirt",
+      price: 32,
+      image: "/images/store-artworks/orange-arc-tee.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Everyday tee with the Orange Arc front graphic.",
+    },
+    hoodie: {
+      id: "orange-arc-hoodie",
+      name: "Orange Arc Signature Hoodie",
+      category: "Hoodie",
+      price: 50,
+      image: "/images/store-artworks/orange-arc-hoodie.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Warm hoodie with oversized Orange Arc chest print.",
+    },
   },
   {
-    id: "bottle-hydrate",
-    name: "Hydrate to Compete Bottle",
-    category: "Bottle",
-    price: 22,
-    image: "/images/placeholder.svg",
-    colors: ["Emerald", "Slate"],
-    sizes: ["24oz"],
-    description: "Insulated bottle built for long practices and tournament days.",
+    id: "eat-sleep-basketball-repeat",
+    artworkName: "Eat Sleep Basketball Repeat",
+    sport: "Basketball",
+    description: "Vintage basketball statement design in game-night orange.",
+    tshirt: {
+      id: "eat-sleep-basketball-repeat-tee",
+      name: "Repeat Grind Tee",
+      category: "T-Shirt",
+      price: 32,
+      image: "/images/store-artworks/eat-sleep-basketball-repeat-tee.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Lightweight tee with Eat Sleep Basketball Repeat print.",
+    },
+    hoodie: {
+      id: "eat-sleep-basketball-repeat-hoodie",
+      name: "Repeat Grind Hoodie",
+      category: "Hoodie",
+      price: 50,
+      image: "/images/store-artworks/eat-sleep-basketball-repeat-hoodie.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Pullover hoodie featuring the Repeat basketball artwork.",
+    },
   },
   {
-    id: "hoodie-training",
-    name: "Training Ground Hoodie",
-    category: "Hoodie",
-    price: 60,
-    image: "/images/placeholder.svg",
-    colors: ["Forest", "Charcoal"],
-    sizes: ["S", "M", "L", "XL"],
-    description: "Athletic fit hoodie featuring moisture-friendly lining.",
+    id: "hoop-lexicon",
+    artworkName: "Hoop Lexicon",
+    sport: "Basketball",
+    description: "Texture-heavy half-ball art built from basketball terms.",
+    tshirt: {
+      id: "hoop-lexicon-tee",
+      name: "Hoop Lexicon Tee",
+      category: "T-Shirt",
+      price: 32,
+      image: "/images/store-artworks/hoop-lexicon-tee.png",
+      colors: ["Midnight"],
+      sizes: merchSizes,
+      description: "Performance tee with typographic Hoop Lexicon print.",
+    },
+    hoodie: {
+      id: "hoop-lexicon-hoodie",
+      name: "Hoop Lexicon Hoodie",
+      category: "Hoodie",
+      price: 50,
+      image: "/images/store-artworks/hoop-lexicon-hoodie.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Heavy fleece hoodie with the Hoop Lexicon chest artwork.",
+    },
   },
   {
-    id: "shirt-performance",
-    name: "Performance Program Tee",
-    category: "T-Shirt",
-    price: 30,
-    image: "/images/placeholder.svg",
-    colors: ["Navy", "Sand"],
-    sizes: ["S", "M", "L", "XL"],
-    description: "Breathable training tee with reinforced collar seam.",
+    id: "neon-ice-breaker",
+    artworkName: "Neon Ice Breaker",
+    sport: "Hockey",
+    description: "Electric neon skater outline for high-speed hockey style.",
+    tshirt: {
+      id: "neon-ice-breaker-tee",
+      name: "Neon Ice Breaker Tee",
+      category: "T-Shirt",
+      price: 32,
+      image: "/images/store-artworks/neon-ice-breaker-tee.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Graphic tee with full neon skater front illustration.",
+    },
+    hoodie: {
+      id: "neon-ice-breaker-hoodie",
+      name: "Neon Ice Breaker Hoodie",
+      category: "Hoodie",
+      price: 50,
+      image: "/images/store-artworks/neon-ice-breaker-hoodie.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Cozy hoodie featuring the neon hockey skater artwork.",
+    },
   },
   {
-    id: "cap-youth",
-    name: "Youth Leader Cap",
-    category: "Cap",
-    price: 21,
-    image: "/images/placeholder.svg",
-    colors: ["Green", "White"],
-    sizes: ["One Size"],
-    description: "Low-profile cap with adjustable strap and minimal logo mark.",
+    id: "eat-hockey-sleep-repeat",
+    artworkName: "Eat Hockey Sleep Repeat",
+    sport: "Hockey",
+    description: "Cold-blue action lettering with a skating power stance.",
+    tshirt: {
+      id: "eat-hockey-sleep-repeat-tee",
+      name: "Blue Line Repeat Tee",
+      category: "T-Shirt",
+      price: 32,
+      image: "/images/store-artworks/eat-hockey-sleep-repeat-tee.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Athletic tee with Eat Hockey Sleep Repeat artwork.",
+    },
+    hoodie: {
+      id: "eat-hockey-sleep-repeat-hoodie",
+      name: "Blue Line Repeat Hoodie",
+      category: "Hoodie",
+      price: 50,
+      image: "/images/store-artworks/eat-hockey-sleep-repeat-hoodie.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Black hoodie with neon-blue hockey repeat design.",
+    },
   },
   {
-    id: "bottle-elite",
-    name: "Elite Travel Bottle",
-    category: "Bottle",
-    price: 26,
-    image: "/images/placeholder.svg",
-    colors: ["Navy", "Ice"],
-    sizes: ["32oz"],
-    description: "Large insulated bottle for athletes on the move.",
+    id: "bring-it-usa",
+    artworkName: "Bring It USA",
+    sport: "Soccer",
+    description: "Patriotic soccer crest artwork with bold brush lettering.",
+    tshirt: {
+      id: "bring-it-usa-tee",
+      name: "Bring It USA Tee",
+      category: "T-Shirt",
+      price: 32,
+      image: "/images/store-artworks/bring-it-usa-tee.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Soccer-themed tee with Bring It USA front graphic.",
+    },
+    hoodie: {
+      id: "bring-it-usa-hoodie",
+      name: "Bring It USA Hoodie",
+      category: "Hoodie",
+      price: 50,
+      image: "/images/store-artworks/bring-it-usa-hoodie.png",
+      colors: ["Black"],
+      sizes: merchSizes,
+      description: "Hoodie with oversized patriotic soccer emblem print.",
+    },
   },
   {
-    id: "bag-daypack",
-    name: "Game Day Cinch Bag",
-    category: "Bag",
-    price: 32,
-    image: "/images/placeholder.svg",
-    colors: ["Navy", "Green"],
-    sizes: ["One Size"],
-    description: "Cinch daypack with separate pocket for hydration and gear.",
+    id: "gridiron-splash",
+    artworkName: "Gridiron Splash",
+    sport: "Football",
+    description: "Dynamic football catch artwork with textured splash detail.",
+    tshirt: {
+      id: "gridiron-splash-tee",
+      name: "Gridiron Splash Tee",
+      category: "T-Shirt",
+      price: 32,
+      image: "/images/store-artworks/gridiron-splash-tee.png",
+      colors: ["White"],
+      sizes: merchSizes,
+      description: "White tee with full-color Gridiron Splash illustration.",
+    },
+    hoodie: {
+      id: "gridiron-splash-hoodie",
+      name: "Gridiron Splash Hoodie",
+      category: "Hoodie",
+      price: 50,
+      image: "/images/store-artworks/gridiron-splash-hoodie.png",
+      colors: ["White"],
+      sizes: merchSizes,
+      description: "White fleece hoodie featuring the Gridiron Splash print.",
+    },
   },
   {
-    id: "bag-travel",
-    name: "Travel Team Tote",
-    category: "Bag",
-    price: 38,
-    image: "/images/placeholder.svg",
-    colors: ["Stone", "Navy"],
-    sizes: ["One Size"],
-    description: "Structured tote for tournaments, clinics, and team logistics.",
+    id: "be-legendary",
+    artworkName: "Be Legendary",
+    sport: "Soccer",
+    description: "Minimal monochrome soccer badge designed for clean streetwear.",
+    tshirt: {
+      id: "be-legendary-tee",
+      name: "Be Legendary Tee",
+      category: "T-Shirt",
+      price: 32,
+      image: "/images/store-artworks/be-legendary-tee.png",
+      colors: ["White"],
+      sizes: merchSizes,
+      description: "White cotton tee with Be Legendary soccer emblem.",
+    },
+    hoodie: {
+      id: "be-legendary-hoodie",
+      name: "Be Legendary Hoodie",
+      category: "Hoodie",
+      price: 50,
+      image: "/images/store-artworks/be-legendary-hoodie.png",
+      colors: ["White"],
+      sizes: merchSizes,
+      description: "White hoodie with high-contrast Be Legendary front print.",
+    },
   },
 ];
+
+export type ProgramProfile = {
+  sport: string;
+  region: string;
+  ages: string;
+  focus: string;
+  paragraph: string;
+};
+
+export const programProfiles: ProgramProfile[] = [
+  {
+    sport: "Basketball",
+    region: "Delaware, Maryland, Virginia, Washington, DC",
+    ages: "Ages 6-17",
+    focus: "Clinics to Tournament Play",
+    paragraph:
+      "Basketball programs across Delaware, Maryland, Virginia, and the Washington, DC area have built a strong, long-running tradition of developing young athletes through community-based organizations. For decades, these programs have welcomed thousands of players ages 6-17, offering a full pathway from beginner clinics to competitive tournament play. Many organizations in these regions began in the 1970s and have continued to grow, shaping generations of youth athletes. Skill-building clinics introduce young players to fundamentals such as ball handling, shooting, footwork, and teamwork. As athletes progress, they move into structured training environments that emphasize discipline, conditioning, and game strategy. Seasonal leagues provide consistent opportunities for real competition, helping players apply their skills in meaningful game situations. Regional tournaments bring teams together from multiple states, creating exciting matchups and fostering a strong sense of community pride. Coaches across these programs focus on character development as much as athletic growth, reinforcing sportsmanship and accountability. Families and local supporters play a major role in sustaining these efforts, ensuring that young athletes have access to positive, motivating environments. Over the years, many talented players have started their journey in programs like these, gaining early exposure to high-quality coaching and competition that helped shape their long-term love for the game.",
+  },
+  {
+    sport: "Football",
+    region: "Florida and Georgia",
+    ages: "Ages 6-17",
+    focus: "Year-Round Development",
+    paragraph:
+      "Youth football programs in Florida and Georgia provide a strong developmental pathway for young athletes across both states. These programs have grown steadily over the years, offering structured training for players ages 6-17. Coaches focus on teaching fundamentals such as footwork, agility, teamwork, and discipline. Seasonal leagues give athletes consistent opportunities to compete and apply their skills in real game situations. Many communities host well-organized tournaments that bring together teams from across the region. Clinics throughout the year help beginners build confidence while giving advanced players a chance to sharpen their technique. Families and local supporters play an important role in sustaining these programs and creating a positive environment. The warm climate in both states allows for extended outdoor training seasons, giving players more time on the field. Youth football in Florida and Georgia continues to grow as more athletes join each year. Through these programs, young players develop not only athletic ability but also character, leadership, and a lasting love for the game.",
+  },
+  {
+    sport: "Baseball and Girls Softball",
+    region: "New York, New Jersey, Connecticut",
+    ages: "Ages 6-17",
+    focus: "14 Competitive Little League Teams",
+    paragraph:
+      "The New York, New Jersey, and Connecticut region hosts a well-established youth baseball network that includes 14 competitive Little League teams. These teams have been active since 2015, providing consistent support and opportunities for young athletes across the Tri-State area. Over the years, the programs have trained thousands of players between the ages of 6 and 17. Each season offers a complete developmental pathway that begins with introductory peewee clinics. As players grow, they advance into structured training sessions designed to build core baseball fundamentals. Older athletes transition into senior-level competition, where they face higher-level opponents and more demanding gameplay. The league emphasizes strong coaching, discipline, and teamwork at every stage of development. Seasonal leagues give players regular game experience, helping them sharpen their skills in real competitive environments. Well-organized tournaments bring teams together from across the region, creating memorable and challenging matchups. Through this system, young athletes gain the confidence, experience, and preparation needed to excel both on and off the field.",
+  },
+  {
+    sport: "Soccer",
+    region: "Northern and Southern California",
+    ages: "Ages 6-18",
+    focus: "12 Tournaments and Clinics",
+    paragraph:
+      "Northern and Southern California have built a strong and enduring presence through 12 well-organized tournaments and clinics that serve young athletes year-round. These programs have been active for decades, creating a structured pathway for players ages 6-18 to learn, grow, and compete. Clinics introduce beginners to essential skills such as dribbling, passing, footwork, and teamwork in a supportive environment. As players advance, they participate in more intensive training sessions that focus on strategy, conditioning, and game awareness. Seasonal tournaments bring together teams from across both regions, creating exciting matchups and valuable competitive experience. Coaches emphasize discipline, sportsmanship, and steady improvement as core elements of each program. Families and local communities play a major role in supporting these events, helping maintain a positive and motivating atmosphere. The combination of clinics and tournaments ensures that players receive both instruction and real-game opportunities. Many young athletes develop long-lasting friendships and a strong sense of confidence through these programs. Over the years, Northern and Southern California soccer communities have helped shape thousands of players who carry their love for the game into high school, club, and beyond.",
+  },
+  {
+    sport: "Hockey",
+    region: "New York, Massachusetts, Rhode Island",
+    ages: "Youth Development Pipeline",
+    focus: "4 Organizations Since the 1970s",
+    paragraph:
+      "The northeast region of New York, Massachusetts, and Rhode Island is home to four long-standing hockey organizations with roots reaching back to the 1970s. These programs have grown into well-established community pillars that now serve more than 13,000 young athletes each year. They offer a full range of development opportunities designed to support players at every stage of their growth. Young athletes begin with foundational skill-building clinics that introduce skating, puck control, and teamwork. As they advance, they participate in structured practices that strengthen fundamentals and build confidence on the ice. Competitive tournaments bring together teams from across the region, creating exciting matchups and valuable game experience. Coaches emphasize discipline, sportsmanship, and steady improvement as core elements of the training environment. Families and local communities provide strong support, helping the programs maintain a positive and motivating atmosphere. The organizations continue to evolve while staying committed to developing well-rounded young players. Through this system, thousands of athletes gain the skills, experience, and passion needed to build a lifelong love for the game.",
+  },
+];
+
+export const products: Product[] = artworkCollections.flatMap((artwork) => [artwork.tshirt, artwork.hoodie]);
 
 export const values = ["Transparency", "Equity", "Community", "Excellence"];
 
@@ -264,34 +488,14 @@ export const faqItems = [
       "Consult a tax professional; we provide receipts where applicable.",
   },
   {
-    question: "Can a local team request support?",
-    answer:
-      "Yes. Submit a program request through our Contact page and include your organization details, athlete count, and funding need.",
-  },
-  {
     question: "How quickly are donations distributed?",
     answer:
       "Approved programs typically receive allocations within 15 to 30 days after campaign closure.",
   },
   {
-    question: "How does the monthly giving option work?",
-    answer:
-      "Monthly giving is a recurring pledge model that helps provide consistent year-round support for youth programs.",
-  },
-  {
     question: "When will store orders ship?",
     answer:
       "Most orders ship within 5 to 7 business days with tracking updates shared by email.",
-  },
-  {
-    question: "What is your refund policy for merch?",
-    answer:
-      "Unworn items can be exchanged or refunded within 30 days of delivery.",
-  },
-  {
-    question: "Can I sponsor one specific athlete?",
-    answer:
-      "You can choose Sponsor an Athlete on the Donate page, and support is routed through approved program pools.",
   },
   {
     question: "Do you share program impact reports?",
@@ -326,3 +530,4 @@ export const impactStories = [
     image: "/images/placeholder.svg",
   },
 ];
+

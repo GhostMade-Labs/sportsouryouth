@@ -13,8 +13,8 @@ export default function ProgramsPage() {
     <>
       <PageHero title="Programs" subtitle="Explore the clinics, camps, and tournament pathways we help fund across youth sports." />
       <SectionShell
-        title="Find a Program"
-        description="Filter by sport and review how each program uses support for coaching, equipment, nutrition, travel, and tournament fees."
+        title="Program Coverage"
+        description="A full look at our basketball, football, baseball and girls softball, soccer, and hockey program pathways."
       >
         <ProgramGrid />
       </SectionShell>

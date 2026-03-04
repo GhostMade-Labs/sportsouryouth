@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import { mission, vision, values, teamMembers } from "@/lib/data";
+import { mission, vision } from "@/lib/data";
 import { PageHero } from "@/components/layout/page-hero";
 import { SectionShell } from "@/components/sections/section-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,14 +27,6 @@ export default function AboutPage() {
         </div>
       </SectionShell>
 
-      <SectionShell title="Core Values" description="The standards guiding every campaign and support decision.">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {values.map((value) => (
-            <Card key={value}><CardContent className="p-6 text-center font-semibold">{value}</CardContent></Card>
-          ))}
-        </div>
-      </SectionShell>
-
       <SectionShell title="Where Your Money Goes" description="A clear allocation model built for transparency and accountability.">
         <div className="space-y-4">
           <div className="rounded-xl border border-border bg-card p-4">
@@ -50,20 +41,6 @@ export default function AboutPage() {
             <p className="mb-2 text-sm font-semibold">Operations and Compliance - 15%</p>
             <div className="h-3 rounded-full bg-muted"><div className="h-full w-[15%] rounded-full bg-[#3d5a80]" /></div>
           </div>
-        </div>
-      </SectionShell>
-
-      <SectionShell title="Leadership Team" description="Experienced operators focused on reliable program outcomes.">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {teamMembers.map((member) => (
-            <Card key={member.name}>
-              <CardContent className="space-y-3 p-4">
-                <Image src={member.image} alt={member.name} width={420} height={300} className="h-40 w-full rounded-xl object-cover" />
-                <p className="font-semibold">{member.name}</p>
-                <p className="text-sm text-muted-foreground">{member.role}</p>
-              </CardContent>
-            </Card>
-          ))}
         </div>
       </SectionShell>
     </>

@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/sections/hero-section";
-import { TrustStrip } from "@/components/sections/trust-strip";
 import { StatsSection } from "@/components/sections/stats-section";
 import { HowItWorksSection } from "@/components/sections/how-it-works-section";
 import { ProgramsPreviewSection } from "@/components/sections/programs-preview-section";
 import { MerchTeaserSection } from "@/components/sections/merch-teaser-section";
-import { TestimonialsSection } from "@/components/sections/testimonials-section";
 import { CalculatorSection } from "@/components/sections/calculator-section";
 import { FinalCtaSection } from "@/components/sections/final-cta-section";
 
@@ -19,12 +17,10 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <TrustStrip />
       <StatsSection />
       <HowItWorksSection />
       <ProgramsPreviewSection />
       <MerchTeaserSection />
-      <TestimonialsSection />
       <CalculatorSection />
       <FinalCtaSection />
     </>

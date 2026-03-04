@@ -3,7 +3,7 @@ import Image from "next/image";
 import { PageHero } from "@/components/layout/page-hero";
 import { SectionShell } from "@/components/sections/section-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { impactStats, impactStories } from "@/lib/data";
+import { impactStats } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Impact",
@@ -19,24 +19,6 @@ export default function ImpactPage() {
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {impactStats.map((stat) => (
             <Card key={stat.label}><CardContent className="p-5"><p className="text-sm text-muted-foreground">{stat.label}</p><p className="text-3xl font-bold">{stat.value}</p></CardContent></Card>
-          ))}
-        </div>
-      </SectionShell>
-
-      <SectionShell title="Community Reach" description="Where program investments are active across communities.">
-        <Image src="/images/placeholder.svg" alt="Impact map" width={1280} height={520} className="h-auto w-full rounded-2xl border border-border" />
-      </SectionShell>
-
-      <SectionShell title="Case Studies" description="Program stories that show what support can unlock.">
-        <div className="grid gap-5 md:grid-cols-2">
-          {impactStories.map((story) => (
-            <Card key={story.title}>
-              <CardHeader>
-                <Image src={story.image} alt={story.title} width={700} height={360} className="h-52 w-full rounded-xl object-cover" />
-                <CardTitle className="mt-3">{story.title}</CardTitle>
-              </CardHeader>
-              <CardContent><p className="text-sm text-muted-foreground">{story.summary}</p></CardContent>
-            </Card>
           ))}
         </div>
       </SectionShell>

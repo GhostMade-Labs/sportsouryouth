@@ -1,73 +1,128 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import type { Product } from "@/lib/data";
-import { products } from "@/lib/data";
-import { ProductCard } from "@/components/store/product-card";
-import { ProductModal } from "@/components/store/product-modal";
+import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import type { ArtworkCollection, Product } from "@/lib/data";
+import { artworkCollections } from "@/lib/data";
 import { CartDrawer } from "@/components/store/cart-drawer";
-import { Select } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { useCart } from "@/components/store/cart-provider";
+import { formatCurrency } from "@/lib/utils";
 
 type StoreCatalogProps = {
   limit?: number;
 };
 
+type Variant = "tee" | "hoodie";
+
+type ArtworkCardProps = {
+  collection: ArtworkCollection;
+};
+
+function ArtworkCard({ collection }: ArtworkCardProps) {
+  const { addItem } = useCart();
+  const [variant, setVariant] = useState<Variant>("tee");
+  const product: Product = variant === "tee" ? collection.tshirt : collection.hoodie;
+  const [size, setSize] = useState(product.sizes[0]);
+  const color = product.colors[0];
+
+  useEffect(() => {
+    setSize(product.sizes[0]);
+  }, [product.id, product.sizes]);
+
+  return (
+    <Card className="h-full overflow-hidden border-border/70 bg-card shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+      <CardContent className="space-y-4 p-4">
+        <div className="relative overflow-hidden rounded-2xl border border-border/60">
+          <Image
+            src={product.image}
+            alt={product.name}
+            width={1024}
+            height={1536}
+            className="h-[21rem] w-full object-cover sm:h-[23rem]"
+          />
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge className="border-accent/30 bg-accent/15 text-accent-foreground">{collection.sport}</Badge>
+          <Badge>{variant === "tee" ? "T-Shirt" : "Hoodie"}</Badge>
+        </div>
+
+        <div className="space-y-1">
+          <h3 className="text-xl font-semibold">{collection.artworkName}</h3>
+          <p className="text-sm text-muted-foreground">{product.name}</p>
+        </div>
+
+        <p className="text-sm text-muted-foreground">{collection.description}</p>
+
+        <div className="grid grid-cols-2 gap-1 rounded-xl border border-border bg-muted/40 p-1">
+          <button
+            type="button"
+            className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
+              variant === "tee" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-card"
+            }`}
+            onClick={() => setVariant("tee")}
+            aria-label={`Show ${collection.artworkName} T-Shirt`}
+          >
+            T-Shirt
+          </button>
+          <button
+            type="button"
+            className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
+              variant === "hoodie" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-card"
+            }`}
+            onClick={() => setVariant("hoodie")}
+            aria-label={`Show ${collection.artworkName} Hoodie`}
+          >
+            Hoodie
+          </button>
+        </div>
+
+        <div className="space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Select Size</p>
+          <div className="flex flex-wrap gap-2">
+            {product.sizes.map((option) => (
+              <button
+                key={option}
+                type="button"
+                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                  size === option ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:bg-muted"
+                }`}
+                onClick={() => setSize(option)}
+                aria-label={`Select size ${option} for ${product.name}`}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-lg font-semibold">{formatCurrency(product.price)}</p>
+          <Button variant="accent" onClick={() => addItem(product, size, color)}>
+            Add to cart
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function StoreCatalog({ limit }: StoreCatalogProps) {
-  const [category, setCategory] = useState("All");
-  const [size, setSize] = useState("All");
-  const [maxPrice, setMaxPrice] = useState(100);
-  const [selected, setSelected] = useState<Product | null>(null);
-
   const visibleProducts = useMemo(() => {
-    const filtered = products.filter((product) => {
-      const categoryMatch = category === "All" || product.category === category;
-      const sizeMatch = size === "All" || product.sizes.includes(size);
-      return categoryMatch && sizeMatch && product.price <= maxPrice;
-    });
-
-    return typeof limit === "number" ? filtered.slice(0, limit) : filtered;
-  }, [category, size, maxPrice, limit]);
-
-  const categories = ["All", ...new Set(products.map((product) => product.category))];
-  const sizes = ["All", ...new Set(products.flatMap((product) => product.sizes))];
+    return typeof limit === "number" ? artworkCollections.slice(0, limit) : artworkCollections;
+  }, [limit]);
 
   return (
     <>
-      {!limit ? (
-        <div className="mb-6 grid gap-3 rounded-2xl border border-border bg-card p-4 md:grid-cols-3">
-          <Select value={category} onChange={(event) => setCategory(event.target.value)} aria-label="Filter by category">
-            {categories.map((option) => (
-              <option key={option} value={option}>{option}</option>
-            ))}
-          </Select>
-          <Select value={size} onChange={(event) => setSize(event.target.value)} aria-label="Filter by size">
-            {sizes.map((option) => (
-              <option key={option} value={option}>{option}</option>
-            ))}
-          </Select>
-          <label className="space-y-1 text-sm text-muted-foreground">
-            Max Price: ${maxPrice}
-            <Input
-              type="range"
-              min={20}
-              max={100}
-              value={maxPrice}
-              onChange={(event) => setMaxPrice(Number(event.target.value))}
-              className="h-10 px-0"
-              aria-label="Max price"
-            />
-          </label>
-        </div>
-      ) : null}
-
-      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-        {visibleProducts.map((product) => (
-          <ProductCard key={product.id} product={product} onView={setSelected} />
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {visibleProducts.map((collection) => (
+          <ArtworkCard key={collection.id} collection={collection} />
         ))}
       </div>
 
-      <ProductModal product={selected} onClose={() => setSelected(null)} />
       <CartDrawer />
     </>
   );
