@@ -6,7 +6,7 @@ export function ProgramGrid() {
   return (
     <div className="space-y-5">
       {programProfiles.map((program) => (
-        <Card key={program.sport} className="overflow-hidden">
+        <Card id={program.id} key={program.sport} className="scroll-mt-28 overflow-hidden">
           <CardContent className="grid gap-6 p-0 lg:grid-cols-[280px_1fr]">
             <div className="space-y-4 border-b border-border bg-muted/40 p-6 lg:border-b-0 lg:border-r">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">{program.sport}</p>

@@ -4,7 +4,6 @@ import { StatsSection } from "@/components/sections/stats-section";
 import { HowItWorksSection } from "@/components/sections/how-it-works-section";
 import { ProgramsPreviewSection } from "@/components/sections/programs-preview-section";
 import { MerchTeaserSection } from "@/components/sections/merch-teaser-section";
-import { CalculatorSection } from "@/components/sections/calculator-section";
 import { FinalCtaSection } from "@/components/sections/final-cta-section";
 
 export const metadata: Metadata = {
@@ -21,7 +20,6 @@ export default function HomePage() {
       <HowItWorksSection />
       <ProgramsPreviewSection />
       <MerchTeaserSection />
-      <CalculatorSection />
       <FinalCtaSection />
     </>
   );

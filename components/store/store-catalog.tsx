@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useCart } from "@/components/store/cart-provider";
-import { formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 
 type StoreCatalogProps = {
   limit?: number;
@@ -21,12 +21,23 @@ type ArtworkCardProps = {
   collection: ArtworkCollection;
 };
 
+const tallHoodieImageBackgroundById: Record<string, string> = {
+  "play-like-girl-hoodie": "#fefdfb",
+  "orange-arc-hoodie": "#f4f4f4",
+  "neon-ice-breaker-hoodie": "#ffffff",
+  "eat-hockey-sleep-repeat-hoodie": "#fdfdfd",
+  "bring-it-usa-hoodie": "#f8f4f1",
+  "gridiron-splash-hoodie": "#000000",
+};
+
 function ArtworkCard({ collection }: ArtworkCardProps) {
   const { addItem } = useCart();
   const [variant, setVariant] = useState<Variant>("tee");
   const product: Product = variant === "tee" ? collection.tshirt : collection.hoodie;
   const [size, setSize] = useState(product.sizes[0]);
   const color = product.colors[0];
+  const tallHoodieBackground = tallHoodieImageBackgroundById[product.id];
+  const shouldFitToContent = Boolean(tallHoodieBackground);
 
   useEffect(() => {
     setSize(product.sizes[0]);
@@ -35,13 +46,19 @@ function ArtworkCard({ collection }: ArtworkCardProps) {
   return (
     <Card className="h-full overflow-hidden border-border/70 bg-card shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
       <CardContent className="space-y-4 p-4">
-        <div className="relative overflow-hidden rounded-2xl border border-border/60">
+        <div
+          className="relative h-[21rem] overflow-hidden rounded-2xl border border-border/60 sm:h-[23rem]"
+          style={shouldFitToContent ? { backgroundColor: tallHoodieBackground } : undefined}
+        >
           <Image
             src={product.image}
             alt={product.name}
             width={1024}
             height={1536}
-            className="h-[21rem] w-full object-cover sm:h-[23rem]"
+            className={cn(
+              "h-full w-full",
+              shouldFitToContent ? "object-contain p-2 sm:p-3" : "object-cover",
+            )}
           />
         </div>
 

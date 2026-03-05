@@ -401,6 +401,7 @@ export const artworkCollections: ArtworkCollection[] = [
 ];
 
 export type ProgramProfile = {
+  id: string;
   sport: string;
   region: string;
   ages: string;
@@ -410,6 +411,7 @@ export type ProgramProfile = {
 
 export const programProfiles: ProgramProfile[] = [
   {
+    id: "basketball",
     sport: "Basketball",
     region: "Delaware, Maryland, Virginia, Washington, DC",
     ages: "Ages 6-17",
@@ -418,6 +420,7 @@ export const programProfiles: ProgramProfile[] = [
       "Basketball programs across Delaware, Maryland, Virginia, and the Washington, DC area have built a strong, long-running tradition of developing young athletes through community-based organizations. For decades, these programs have welcomed thousands of players ages 6-17, offering a full pathway from beginner clinics to competitive tournament play. Many organizations in these regions began in the 1970s and have continued to grow, shaping generations of youth athletes. Skill-building clinics introduce young players to fundamentals such as ball handling, shooting, footwork, and teamwork. As athletes progress, they move into structured training environments that emphasize discipline, conditioning, and game strategy. Seasonal leagues provide consistent opportunities for real competition, helping players apply their skills in meaningful game situations. Regional tournaments bring teams together from multiple states, creating exciting matchups and fostering a strong sense of community pride. Coaches across these programs focus on character development as much as athletic growth, reinforcing sportsmanship and accountability. Families and local supporters play a major role in sustaining these efforts, ensuring that young athletes have access to positive, motivating environments. Over the years, many talented players have started their journey in programs like these, gaining early exposure to high-quality coaching and competition that helped shape their long-term love for the game.",
   },
   {
+    id: "football",
     sport: "Football",
     region: "Florida and Georgia",
     ages: "Ages 6-17",
@@ -426,6 +429,7 @@ export const programProfiles: ProgramProfile[] = [
       "Youth football programs in Florida and Georgia provide a strong developmental pathway for young athletes across both states. These programs have grown steadily over the years, offering structured training for players ages 6-17. Coaches focus on teaching fundamentals such as footwork, agility, teamwork, and discipline. Seasonal leagues give athletes consistent opportunities to compete and apply their skills in real game situations. Many communities host well-organized tournaments that bring together teams from across the region. Clinics throughout the year help beginners build confidence while giving advanced players a chance to sharpen their technique. Families and local supporters play an important role in sustaining these programs and creating a positive environment. The warm climate in both states allows for extended outdoor training seasons, giving players more time on the field. Youth football in Florida and Georgia continues to grow as more athletes join each year. Through these programs, young players develop not only athletic ability but also character, leadership, and a lasting love for the game.",
   },
   {
+    id: "baseball-girls-softball",
     sport: "Baseball and Girls Softball",
     region: "New York, New Jersey, Connecticut",
     ages: "Ages 6-17",
@@ -434,6 +438,7 @@ export const programProfiles: ProgramProfile[] = [
       "The New York, New Jersey, and Connecticut region hosts a well-established youth baseball network that includes 14 competitive Little League teams. These teams have been active since 2015, providing consistent support and opportunities for young athletes across the Tri-State area. Over the years, the programs have trained thousands of players between the ages of 6 and 17. Each season offers a complete developmental pathway that begins with introductory peewee clinics. As players grow, they advance into structured training sessions designed to build core baseball fundamentals. Older athletes transition into senior-level competition, where they face higher-level opponents and more demanding gameplay. The league emphasizes strong coaching, discipline, and teamwork at every stage of development. Seasonal leagues give players regular game experience, helping them sharpen their skills in real competitive environments. Well-organized tournaments bring teams together from across the region, creating memorable and challenging matchups. Through this system, young athletes gain the confidence, experience, and preparation needed to excel both on and off the field.",
   },
   {
+    id: "soccer",
     sport: "Soccer",
     region: "Northern and Southern California",
     ages: "Ages 6-18",
@@ -442,6 +447,7 @@ export const programProfiles: ProgramProfile[] = [
       "Northern and Southern California have built a strong and enduring presence through 12 well-organized tournaments and clinics that serve young athletes year-round. These programs have been active for decades, creating a structured pathway for players ages 6-18 to learn, grow, and compete. Clinics introduce beginners to essential skills such as dribbling, passing, footwork, and teamwork in a supportive environment. As players advance, they participate in more intensive training sessions that focus on strategy, conditioning, and game awareness. Seasonal tournaments bring together teams from across both regions, creating exciting matchups and valuable competitive experience. Coaches emphasize discipline, sportsmanship, and steady improvement as core elements of each program. Families and local communities play a major role in supporting these events, helping maintain a positive and motivating atmosphere. The combination of clinics and tournaments ensures that players receive both instruction and real-game opportunities. Many young athletes develop long-lasting friendships and a strong sense of confidence through these programs. Over the years, Northern and Southern California soccer communities have helped shape thousands of players who carry their love for the game into high school, club, and beyond.",
   },
   {
+    id: "hockey",
     sport: "Hockey",
     region: "New York, Massachusetts, Rhode Island",
     ages: "Youth Development Pipeline",
@@ -530,4 +536,3 @@ export const impactStories = [
     image: "/images/placeholder.svg",
   },
 ];
-

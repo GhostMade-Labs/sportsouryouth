@@ -27,7 +27,7 @@ export function HelpWidget() {
               </button>
             </div>
             <p className="text-sm text-muted-foreground">
-              Reach us at <a className="font-semibold text-foreground" href="mailto:hello@sportsouryouth.org">hello@sportsouryouth.org</a> or call
+              Reach us at <a className="font-semibold text-foreground" href="mailto:info@sportsouryouth.org">info@sportsouryouth.org</a> or call
               <a className="ml-1 font-semibold text-foreground" href="tel:+13125550188">(312) 555-0188</a>.
             </p>
             <p className="mt-3 text-sm text-muted-foreground">Hours: Monday-Friday, 9:00 AM to 6:00 PM CT.</p>

@@ -10,8 +10,6 @@ const tiers = [25, 50, 100];
 export function DonateForm() {
   const [selectedAmount, setSelectedAmount] = useState<number>(50);
   const [customAmount, setCustomAmount] = useState("");
-  const [monthly, setMonthly] = useState(false);
-  const [sponsorAthlete, setSponsorAthlete] = useState(false);
 
   return (
     <Card>
@@ -56,22 +54,11 @@ export function DonateForm() {
           </label>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-2">
-          <label className="flex items-center gap-2 rounded-xl border border-border bg-muted p-3 text-sm font-medium">
-            <input type="checkbox" checked={monthly} onChange={(event) => setMonthly(event.target.checked)} />
-            Monthly giving
-          </label>
-          <label className="flex items-center gap-2 rounded-xl border border-border bg-muted p-3 text-sm font-medium">
-            <input type="checkbox" checked={sponsorAthlete} onChange={(event) => setSponsorAthlete(event.target.checked)} />
-            Sponsor an athlete
-          </label>
-        </div>
-
         <div className="rounded-xl border border-border bg-muted p-3 text-sm text-muted-foreground">
           Transparency note: Donations support coaching, equipment, nutrition, travel, and tournament fees.
         </div>
 
-        <Button variant="accent" className="w-full">Submit Donation Intent ${customAmount || selectedAmount}{monthly ? " / month" : ""}</Button>
+        <Button variant="accent" className="w-full">Submit Donation Intent ${customAmount || selectedAmount}</Button>
       </CardContent>
     </Card>
   );

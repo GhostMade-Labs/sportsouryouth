@@ -1,9 +1,42 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { PageHero } from "@/components/layout/page-hero";
+import { ImpactGallerySlider } from "@/components/impact/impact-gallery-slider";
 import { SectionShell } from "@/components/sections/section-shell";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { impactStats } from "@/lib/data";
+
+const impactGallerySlides = [
+  {
+    src: "/images/program-preview/basketball-clinic-drill.png",
+    alt: "Basketball clinic drill",
+    title: "Basketball",
+    caption: "Team passing and footwork sessions during a youth development clinic.",
+  },
+  {
+    src: "/images/program-preview/football-youth-scrimmage.png",
+    alt: "Youth football scrimmage",
+    title: "Football",
+    caption: "Weekend scrimmage reps where athletes build confidence, discipline, and teamwork.",
+  },
+  {
+    src: "/images/program-preview/baseball-kid-batter.png",
+    alt: "Youth baseball batter at the plate",
+    title: "Baseball and Girls Softball",
+    caption: "Game-day batting practice that reinforces mechanics and composure at the plate.",
+  },
+  {
+    src: "/images/program-preview/soccer-girls-drill.png",
+    alt: "Girls soccer training drill",
+    title: "Soccer",
+    caption: "Small-group technical drills focused on quick decisions and ball control.",
+  },
+  {
+    src: "/images/program-preview/hockey-team-rink.png",
+    alt: "Youth hockey team on the rink",
+    title: "Hockey",
+    caption: "On-ice team sessions that improve skating fundamentals and communication.",
+  },
+];
 
 export const metadata: Metadata = {
   title: "Impact",
@@ -24,11 +57,7 @@ export default function ImpactPage() {
       </SectionShell>
 
       <SectionShell title="Photo Gallery" description="Moments from clinics, practices, and competition days.">
-        <div className="grid gap-4 sm:grid-cols-3">
-          {["/images/placeholder.svg", "/images/placeholder.svg", "/images/placeholder.svg"].map((image, index) => (
-            <Image key={`${image}-${index}`} src={image} alt="Youth sports gallery image" width={420} height={300} className="h-48 w-full rounded-xl border border-border object-cover" />
-          ))}
-        </div>
+        <ImpactGallerySlider slides={impactGallerySlides} autoPlayMs={2000} />
       </SectionShell>
     </>
   );
