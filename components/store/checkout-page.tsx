@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
@@ -55,7 +55,15 @@ async function postJSON<T>(url: string, body: unknown): Promise<T> {
   return data as T;
 }
 
-function StripePayArea({ orderId, onPaid }: { orderId: string; onPaid: () => void }) {
+function StripePayArea({
+  orderId,
+  onPaid,
+  disabled,
+}: {
+  orderId: string;
+  onPaid: () => void;
+  disabled?: boolean;
+}) {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -123,19 +131,31 @@ function StripePayArea({ orderId, onPaid }: { orderId: string; onPaid: () => voi
 
   return (
     <div className="space-y-3">
-      <div className="rounded-xl border border-border bg-card p-4">
+      <div className={`rounded-xl border border-border bg-card p-4 ${disabled ? "pointer-events-none opacity-60" : ""}`}>
         <PaymentElement />
       </div>
       {error ? <p className="text-sm text-red-500">{error}</p> : null}
-      <Button onClick={handleStripePay} disabled={!stripe || loading} className="w-full">
+      {disabled ? <p className="text-xs text-muted-foreground">Fill shipping information to enable Stripe payment.</p> : null}
+      <Button onClick={handleStripePay} disabled={!stripe || loading || Boolean(disabled)} className="w-full">
         {loading ? "Processing..." : "Pay with Stripe"}
       </Button>
     </div>
   );
 }
 
-function PayPalPayArea({ orderId, onPaid }: { orderId: string; onPaid: () => void }) {
+function PayPalPayArea({
+  shippingReady,
+  creatingOrder,
+  ensureOrder,
+  onPaid,
+}: {
+  shippingReady: boolean;
+  creatingOrder: boolean;
+  ensureOrder: () => Promise<string>;
+  onPaid: () => void;
+}) {
   const [error, setError] = useState<string | null>(null);
+  const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
 
   if (!paypalClientId) {
     return <p className="text-sm text-red-500">Missing NEXT_PUBLIC_PAYPAL_CLIENT_ID.</p>;
@@ -153,9 +173,18 @@ function PayPalPayArea({ orderId, onPaid }: { orderId: string; onPaid: () => voi
       >
         <PayPalButtons
           style={{ layout: "vertical" }}
+          disabled={!shippingReady || creatingOrder}
           createOrder={async () => {
             setError(null);
-            const { paypalOrderId } = await postJSON<{ paypalOrderId: string }>("/api/paypal/create-order", { orderId });
+            if (!shippingReady) {
+              throw new Error("Fill shipping fields before paying with PayPal.");
+            }
+
+            const resolvedOrderId = await ensureOrder();
+            setActiveOrderId(resolvedOrderId);
+            const { paypalOrderId } = await postJSON<{ paypalOrderId: string }>("/api/paypal/create-order", {
+              orderId: resolvedOrderId,
+            });
             return paypalOrderId;
           }}
           onApprove={async (data) => {
@@ -163,7 +192,11 @@ function PayPalPayArea({ orderId, onPaid }: { orderId: string; onPaid: () => voi
               if (!data.orderID) {
                 throw new Error("PayPal order ID missing");
               }
-              await postJSON("/api/paypal/capture-order", { orderId, paypalOrderId: data.orderID });
+              if (!activeOrderId) {
+                throw new Error("Order is not ready");
+              }
+
+              await postJSON("/api/paypal/capture-order", { orderId: activeOrderId, paypalOrderId: data.orderID });
               onPaid();
             } catch (requestError) {
               const message = requestError instanceof Error ? requestError.message : "PayPal capture failed";
@@ -173,6 +206,7 @@ function PayPalPayArea({ orderId, onPaid }: { orderId: string; onPaid: () => voi
           onError={() => setError("PayPal payment failed")}
         />
       </PayPalScriptProvider>
+      {!shippingReady ? <p className="text-xs text-muted-foreground">Fill shipping information to enable PayPal.</p> : null}
     </div>
   );
 }
@@ -200,7 +234,7 @@ export function CheckoutPage() {
 
   const shippingOk = useMemo(() => isShippingComplete(shipping), [shipping]);
 
-  async function ensureOrder() {
+  const ensureOrder = useCallback(async () => {
     if (orderId) {
       return orderId;
     }
@@ -233,9 +267,9 @@ export function CheckoutPage() {
     } finally {
       setCreatingOrder(false);
     }
-  }
+  }, [items, orderId, shipping]);
 
-  async function ensureStripeIntent(targetOrderId: string) {
+  const ensureStripeIntent = useCallback(async (targetOrderId: string) => {
     if (stripeClientSecret) {
       return stripeClientSecret;
     }
@@ -250,20 +284,32 @@ export function CheckoutPage() {
     } finally {
       setStripeLoading(false);
     }
-  }
+  }, [stripeClientSecret]);
 
-  async function handleContinueToStripe() {
-    if (!shippingOk || !stripePromise) {
+  useEffect(() => {
+    if (!shippingOk || !stripePromise || paymentMethod !== "stripe" || stripeClientSecret || creatingOrder || stripeLoading) {
       return;
     }
 
-    try {
-      const resolvedOrderId = await ensureOrder();
-      await ensureStripeIntent(resolvedOrderId);
-    } catch {
-      // Error is already reflected in UI.
-    }
-  }
+    let active = true;
+    const prepareStripe = async () => {
+      try {
+        const resolvedOrderId = await ensureOrder();
+        if (!active) {
+          return;
+        }
+        await ensureStripeIntent(resolvedOrderId);
+      } catch {
+        // Error is already reflected in UI.
+      }
+    };
+
+    void prepareStripe();
+
+    return () => {
+      active = false;
+    };
+  }, [creatingOrder, ensureOrder, ensureStripeIntent, paymentMethod, shippingOk, stripeClientSecret, stripeLoading]);
 
   function handlePaid() {
     setSubmitted(true);
@@ -423,37 +469,26 @@ export function CheckoutPage() {
                       <p className="text-sm text-red-500">Missing NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.</p>
                     ) : stripeClientSecret ? (
                       <Elements stripe={stripePromise} options={{ clientSecret: stripeClientSecret, appearance: { theme: "stripe" } }}>
-                        <StripePayArea orderId={orderId!} onPaid={handlePaid} />
+                        <StripePayArea orderId={orderId!} onPaid={handlePaid} disabled={!shippingOk} />
                       </Elements>
                     ) : (
-                      <Button onClick={handleContinueToStripe} disabled={!shippingOk || creatingOrder || stripeLoading} className="w-full">
-                        {creatingOrder || stripeLoading ? "Preparing Stripe..." : "Continue to Stripe"}
-                      </Button>
+                      <div className="space-y-3">
+                        <div className="rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
+                          {shippingOk ? "Preparing secure Stripe form..." : "Fill shipping information to unlock Stripe payment details."}
+                        </div>
+                        <Button disabled className="w-full">
+                          Pay with Stripe
+                        </Button>
+                      </div>
                     )}
                   </>
                 ) : (
-                  <>
-                    {!orderId ? (
-                      <Button
-                        onClick={async () => {
-                          if (!shippingOk) {
-                            return;
-                          }
-                          try {
-                            await ensureOrder();
-                          } catch {
-                            // Error already surfaced to UI.
-                          }
-                        }}
-                        disabled={!shippingOk || creatingOrder}
-                        className="w-full"
-                      >
-                        {creatingOrder ? "Preparing PayPal..." : "Continue to PayPal"}
-                      </Button>
-                    ) : (
-                      <PayPalPayArea orderId={orderId} onPaid={handlePaid} />
-                    )}
-                  </>
+                  <PayPalPayArea
+                    shippingReady={shippingOk}
+                    creatingOrder={creatingOrder}
+                    ensureOrder={ensureOrder}
+                    onPaid={handlePaid}
+                  />
                 )}
               </CardContent>
             </Card>

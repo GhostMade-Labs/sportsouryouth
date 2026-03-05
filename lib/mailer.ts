@@ -18,7 +18,7 @@ function getTransporter() {
   const host = process.env.SMTP_HOST;
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
-  const port = Number(process.env.SMTP_PORT ?? 587);
+  const port = Number(process.env.SMTP_PORT ?? 465);
   const secure = parseBoolean(process.env.SMTP_SECURE, port === 465);
 
   if (!host || !user || !pass) {

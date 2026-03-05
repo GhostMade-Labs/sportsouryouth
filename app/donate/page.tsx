@@ -15,7 +15,7 @@ export default function DonatePage() {
   return (
     <>
       <PageHero title="Donate" subtitle="Fuel coaching, equipment, travel, and tournament access for young athletes." />
-      <SectionShell title="Choose Your Support" description="Select and submit your donation intent or visit our store page to buy merch.">
+      <SectionShell title="Choose Your Support" description="Select an amount and complete payment securely with Stripe or PayPal, or visit our store page to buy merch.">
         <div className="space-y-4">
           <DonateForm />
           <div className="rounded-2xl border border-border bg-card p-5">

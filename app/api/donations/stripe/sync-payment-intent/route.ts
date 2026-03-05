@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
 import { ensureStripeReceipt } from "@/lib/stripe-receipts";
 import { isMailerConfigured } from "@/lib/mailer";
-import { sendStripeOrderFallbackReceiptEmail } from "@/lib/receipts";
+import { sendStripeDonationFallbackReceiptEmail } from "@/lib/receipts";
 
 export const runtime = "nodejs";
 
@@ -20,7 +20,7 @@ function nowIso() {
   return new Date().toISOString();
 }
 
-function mapStripePIStatusToOrderStatus(pi: Stripe.PaymentIntent) {
+function mapStripePIStatusToDonationStatus(pi: Stripe.PaymentIntent) {
   switch (pi.status) {
     case "succeeded":
       return "paid";
@@ -38,50 +38,37 @@ function mapStripePIStatusToOrderStatus(pi: Stripe.PaymentIntent) {
 }
 
 export async function POST(req: Request) {
-  const { orderId, paymentIntentId } = (await req.json().catch(() => ({}))) as {
-    orderId?: string;
+  const { donationId, paymentIntentId } = (await req.json().catch(() => ({}))) as {
+    donationId?: string;
     paymentIntentId?: string;
   };
 
-  if (!orderId) {
-    return NextResponse.json({ error: "Missing orderId" }, { status: 400 });
+  if (!donationId) {
+    return NextResponse.json({ error: "Missing donationId" }, { status: 400 });
   }
 
-  const orderRef = adminDb.collection("orders").doc(orderId);
-  const snap = await orderRef.get();
+  const donationRef = adminDb.collection("donations").doc(donationId);
+  const snap = await donationRef.get();
   if (!snap.exists) {
-    return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    return NextResponse.json({ error: "Donation not found" }, { status: 404 });
   }
 
-  const order = snap.data() as {
+  const donation = snap.data() as {
     stripePaymentIntentId?: string;
     total?: number;
-    items?: Array<{
-      name: string;
-      type: "tshirt" | "hoodie";
-      size: string;
-      color: string;
-      qty: number;
-      price: number;
-    }>;
-    shipping?: {
-      firstName: string;
-      lastName: string;
-      email: string;
-      address1: string;
-      city: string;
-      state: string;
-      zip: string;
+    donor?: {
+      fullName?: string;
+      email?: string;
     };
     stripeFallbackReceiptSentAt?: string;
   };
-  const piId = paymentIntentId || order.stripePaymentIntentId;
+  const piId = paymentIntentId || donation.stripePaymentIntentId;
   if (!piId) {
     return NextResponse.json({ error: "Missing stripePaymentIntentId" }, { status: 400 });
   }
 
   const pi = await stripe.paymentIntents.retrieve(piId);
-  const status = mapStripePIStatusToOrderStatus(pi);
+  const status = mapStripePIStatusToDonationStatus(pi);
 
   const update: Record<string, unknown> = {
     status,
@@ -95,7 +82,7 @@ export async function POST(req: Request) {
     update.paidAt = paidAt;
 
     try {
-      const receipt = await ensureStripeReceipt(stripe, pi, order.shipping?.email?.trim());
+      const receipt = await ensureStripeReceipt(stripe, pi, donation.donor?.email?.trim());
       update.stripeReceiptStatus = receipt.status;
       update.stripeReceiptUrl = receipt.receiptUrl;
     } catch (error) {
@@ -104,23 +91,21 @@ export async function POST(req: Request) {
     }
 
     const canFallbackToMailer =
-      !order.stripeFallbackReceiptSentAt &&
-      Boolean(order.shipping?.email) &&
-      Array.isArray(order.items) &&
-      order.items.length > 0 &&
-      typeof order.total === "number";
+      !donation.stripeFallbackReceiptSentAt &&
+      Boolean(donation.donor?.email) &&
+      typeof donation.total === "number";
 
     if (canFallbackToMailer) {
       if (!isMailerConfigured()) {
         update.stripeFallbackReceiptStatus = "skipped_missing_mailer_config";
       } else {
         try {
-          await sendStripeOrderFallbackReceiptEmail({
-            orderId,
+          await sendStripeDonationFallbackReceiptEmail({
+            donationId,
             paidAtIso: paidAt,
-            total: order.total!,
-            items: order.items!,
-            shipping: order.shipping!,
+            total: donation.total!,
+            donorName: donation.donor?.fullName || "Supporter",
+            donorEmail: donation.donor!.email!,
           });
 
           update.stripeFallbackReceiptStatus = "sent";
@@ -128,7 +113,7 @@ export async function POST(req: Request) {
         } catch (fallbackError) {
           update.stripeFallbackReceiptStatus = "failed";
           update.stripeFallbackReceiptError =
-            fallbackError instanceof Error ? fallbackError.message : "Failed to send Stripe fallback receipt email";
+            fallbackError instanceof Error ? fallbackError.message : "Failed to send Stripe fallback donation receipt email";
         }
       }
     }
@@ -145,7 +130,7 @@ export async function POST(req: Request) {
       : null;
   }
 
-  await orderRef.update(update);
+  await donationRef.update(update);
 
   return NextResponse.json({ ok: true, stripeStatus: pi.status, mappedStatus: status });
 }
