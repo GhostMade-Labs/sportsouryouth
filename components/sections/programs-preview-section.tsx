@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { programProfiles } from "@/lib/data";
-import { cn } from "@/lib/utils";
 import { SectionShell } from "@/components/sections/section-shell";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -34,10 +33,7 @@ export function ProgramsPreviewSection() {
                 alt={`${program.sport} program`}
                 width={640}
                 height={360}
-                className={cn(
-                  "h-40 w-full rounded-xl",
-                  program.sport === "Soccer" ? "bg-muted object-contain p-2" : "object-cover",
-                )}
+                className="h-40 w-full rounded-xl object-cover"
               />
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">{program.sport}</p>
               <CardTitle>{program.focus}</CardTitle>
