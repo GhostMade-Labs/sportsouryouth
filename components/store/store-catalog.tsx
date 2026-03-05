@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import type { ArtworkCollection, Product } from "@/lib/data";
 import { artworkCollections } from "@/lib/data";
-import { CartDrawer } from "@/components/store/cart-drawer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -133,14 +132,10 @@ export function StoreCatalog({ limit }: StoreCatalogProps) {
   }, [limit]);
 
   return (
-    <>
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {visibleProducts.map((collection) => (
-          <ArtworkCard key={collection.id} collection={collection} />
-        ))}
-      </div>
-
-      <CartDrawer />
-    </>
+    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      {visibleProducts.map((collection) => (
+        <ArtworkCard key={collection.id} collection={collection} />
+      ))}
+    </div>
   );
 }

@@ -3,9 +3,12 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import type { Product } from "@/lib/data";
 
-type CartItem = {
+export type CartItem = {
   id: string;
+  productId: string;
   name: string;
+  image: string;
+  type: "tshirt" | "hoodie";
   price: number;
   quantity: number;
   size: string;
@@ -18,7 +21,10 @@ type CartContextValue = {
   openCart: () => void;
   closeCart: () => void;
   addItem: (product: Product, size: string, color: string) => void;
+  removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
+  clearCart: () => void;
+  totalItems: number;
   subtotal: number;
 };
 
@@ -41,7 +47,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         ...prev,
         {
           id: lineId,
+          productId: product.id,
           name: product.name,
+          image: product.image,
+          type: product.category === "Hoodie" ? "hoodie" : "tshirt",
           price: product.price,
           quantity: 1,
           size,
@@ -53,12 +62,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setIsOpen(true);
   };
 
+  const removeItem = (id: string) => {
+    setItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
   const updateQuantity = (id: string, quantity: number) => {
     setItems((prev) =>
       prev
         .map((item) => (item.id === id ? { ...item, quantity: Math.max(0, quantity) } : item))
         .filter((item) => item.quantity > 0),
     );
+  };
+
+  const clearCart = () => {
+    setItems([]);
   };
 
   const value = useMemo(
@@ -68,7 +85,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),
       addItem,
+      removeItem,
       updateQuantity,
+      clearCart,
+      totalItems: items.reduce((sum, item) => sum + item.quantity, 0),
       subtotal: items.reduce((sum, item) => sum + item.price * item.quantity, 0),
     }),
     [items, isOpen],
