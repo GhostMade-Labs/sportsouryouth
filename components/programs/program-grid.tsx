@@ -1,6 +1,40 @@
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { programProfiles } from "@/lib/data";
+
+type ProgramCardVisual = {
+  backgroundSrc: string;
+  emoji: string;
+  objectPosition: string;
+};
+
+const programCardVisualById: Record<string, ProgramCardVisual> = {
+  basketball: {
+    backgroundSrc: "/images/program-cards/basketball-card-bg.png",
+    emoji: "🏀",
+    objectPosition: "56% 46%",
+  },
+  football: {
+    backgroundSrc: "/images/program-cards/football-card-bg.png",
+    emoji: "🏈",
+    objectPosition: "52% 48%",
+  },
+  "baseball-girls-softball": {
+    backgroundSrc: "/images/program-cards/baseball-softball-card-bg.png",
+    emoji: "⚾",
+    objectPosition: "50% 50%",
+  },
+  soccer: {
+    backgroundSrc: "/images/program-cards/soccer-card-bg.png",
+    emoji: "⚽",
+    objectPosition: "52% 46%",
+  },
+  hockey: {
+    backgroundSrc: "/images/program-cards/hockey-card-bg.png",
+    emoji: "🏒",
+    objectPosition: "50% 46%",
+  },
+};
 
 export function ProgramGrid() {
   return (
@@ -8,12 +42,23 @@ export function ProgramGrid() {
       {programProfiles.map((program) => (
         <Card id={program.id} key={program.sport} className="scroll-mt-28 overflow-hidden">
           <CardContent className="grid gap-6 p-0 lg:grid-cols-[280px_1fr]">
-            <div className="space-y-4 border-b border-border bg-muted/40 p-6 lg:border-b-0 lg:border-r">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">{program.sport}</p>
-              <div className="flex flex-wrap gap-2">
-                <Badge>{program.region}</Badge>
-                <Badge>{program.ages}</Badge>
-                <Badge>{program.focus}</Badge>
+            <div className="relative min-h-[21rem] overflow-hidden border-b border-border lg:border-b-0 lg:border-r">
+              <Image
+                src={programCardVisualById[program.id]?.backgroundSrc ?? "/images/placeholder.svg"}
+                alt={`${program.sport} program background`}
+                fill
+                sizes="(min-width: 1024px) 280px, 100vw"
+                className="object-cover"
+                style={{ objectPosition: programCardVisualById[program.id]?.objectPosition ?? "50% 50%" }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/35 to-black/75" />
+              <div className="relative z-10 flex h-full flex-col justify-between p-6 text-white">
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-semibold leading-tight">{program.sport}</h3>
+                </div>
+                <p className="text-5xl leading-none sm:text-6xl" aria-hidden="true">
+                  {programCardVisualById[program.id]?.emoji ?? "🏅"}
+                </p>
               </div>
             </div>
             <div className="p-6 lg:pr-8">

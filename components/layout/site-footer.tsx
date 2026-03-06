@@ -13,6 +13,12 @@ export function SiteFooter() {
             <Image src="/images/logo.png" alt="Sports Our Youth logo" width={168} height={48} className="h-12 w-auto" />
           </Link>
           <p className="max-w-xl text-sm text-muted-foreground">{mission}</p>
+          <address className="not-italic text-sm leading-relaxed text-muted-foreground">
+            <p className="font-medium text-foreground">Sports Our Youth Organization</p>
+            <p>1140 Ave of the Americas</p>
+            <p>9th Floor</p>
+            <p>New York, NY 10036</p>
+          </address>
         </div>
 
         <div>

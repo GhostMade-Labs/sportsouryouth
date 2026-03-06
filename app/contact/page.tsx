@@ -22,7 +22,11 @@ export default function ContactPage() {
               <CardContent className="space-y-2 text-sm text-muted-foreground">
                 <p>Email: info@sportsouryouth.org</p>
                 <p>Phone: (312) 555-0188</p>
-                <p>Location: Chicago Metro Area (serving national partners)</p>
+                <p className="pt-1 font-medium text-foreground">Address</p>
+                <p>Sports Our Youth Organization</p>
+                <p>1140 Ave of the Americas</p>
+                <p>9th Floor</p>
+                <p>New York, NY 10036</p>
               </CardContent>
             </Card>
             <Card>

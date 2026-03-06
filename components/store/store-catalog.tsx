@@ -20,13 +20,50 @@ type ArtworkCardProps = {
   collection: ArtworkCollection;
 };
 
-const tallHoodieImageBackgroundById: Record<string, string> = {
-  "play-like-girl-hoodie": "#fefdfb",
-  "orange-arc-hoodie": "#f4f4f4",
-  "neon-ice-breaker-hoodie": "#ffffff",
-  "eat-hockey-sleep-repeat-hoodie": "#fdfdfd",
-  "bring-it-usa-hoodie": "#f8f4f1",
-  "gridiron-splash-hoodie": "#000000",
+type HoodieImageFrame = {
+  backgroundColor: string;
+  imagePaddingClassName: string;
+  objectPosition: string;
+  scale: number;
+};
+
+const hoodieImageFrameById: Record<string, HoodieImageFrame> = {
+  "play-like-girl-hoodie": {
+    backgroundColor: "#fefdfb",
+    imagePaddingClassName: "p-1 sm:p-2",
+    objectPosition: "50% 47%",
+    scale: 1.06,
+  },
+  "orange-arc-hoodie": {
+    backgroundColor: "#f4f4f4",
+    imagePaddingClassName: "p-0 sm:p-1",
+    objectPosition: "50% 46%",
+    scale: 1.05,
+  },
+  "neon-ice-breaker-hoodie": {
+    backgroundColor: "#ffffff",
+    imagePaddingClassName: "p-0 sm:p-0",
+    objectPosition: "50% 43%",
+    scale: 1.12,
+  },
+  "eat-hockey-sleep-repeat-hoodie": {
+    backgroundColor: "#fdfdfd",
+    imagePaddingClassName: "p-0 sm:p-0",
+    objectPosition: "50% 44%",
+    scale: 1.11,
+  },
+  "bring-it-usa-hoodie": {
+    backgroundColor: "#f8f4f1",
+    imagePaddingClassName: "p-0 sm:p-0",
+    objectPosition: "50% 43%",
+    scale: 1.12,
+  },
+  "gridiron-splash-hoodie": {
+    backgroundColor: "#000000",
+    imagePaddingClassName: "p-1 sm:p-1",
+    objectPosition: "50% 47%",
+    scale: 1.04,
+  },
 };
 
 function ArtworkCard({ collection }: ArtworkCardProps) {
@@ -35,8 +72,8 @@ function ArtworkCard({ collection }: ArtworkCardProps) {
   const product: Product = variant === "tee" ? collection.tshirt : collection.hoodie;
   const [size, setSize] = useState(product.sizes[0]);
   const color = product.colors[0];
-  const tallHoodieBackground = tallHoodieImageBackgroundById[product.id];
-  const shouldFitToContent = Boolean(tallHoodieBackground);
+  const hoodieImageFrame = variant === "hoodie" ? hoodieImageFrameById[product.id] : undefined;
+  const shouldUseHoodieFrame = Boolean(hoodieImageFrame);
 
   useEffect(() => {
     setSize(product.sizes[0]);
@@ -47,7 +84,7 @@ function ArtworkCard({ collection }: ArtworkCardProps) {
       <CardContent className="space-y-4 p-4">
         <div
           className="relative h-[21rem] overflow-hidden rounded-2xl border border-border/60 sm:h-[23rem]"
-          style={shouldFitToContent ? { backgroundColor: tallHoodieBackground } : undefined}
+          style={shouldUseHoodieFrame ? { backgroundColor: hoodieImageFrame?.backgroundColor } : undefined}
         >
           <Image
             src={product.image}
@@ -56,8 +93,18 @@ function ArtworkCard({ collection }: ArtworkCardProps) {
             height={1536}
             className={cn(
               "h-full w-full",
-              shouldFitToContent ? "object-contain p-2 sm:p-3" : "object-cover",
+              shouldUseHoodieFrame
+                ? `object-contain ${hoodieImageFrame?.imagePaddingClassName ?? "p-1 sm:p-2"}`
+                : "object-cover",
             )}
+            style={
+              shouldUseHoodieFrame
+                ? {
+                    objectPosition: hoodieImageFrame?.objectPosition ?? "50% 50%",
+                    transform: `scale(${hoodieImageFrame?.scale ?? 1})`,
+                  }
+                : undefined
+            }
           />
         </div>
 

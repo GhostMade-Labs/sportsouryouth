@@ -16,7 +16,7 @@ export function HeroSection() {
           </p>
           <div className="flex flex-wrap gap-3">
             <Link href="/donate"><Button variant="accent" size="lg">Donate Now</Button></Link>
-            <Link href="/store"><Button variant="outline" size="lg">Shop to Support <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
+            <Link href="/store"><Button variant="outline" size="lg">Free T-Shirt & Hoodie <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
           </div>
         </div>
 
