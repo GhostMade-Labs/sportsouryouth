@@ -21,7 +21,7 @@ export default function ContactPage() {
               <CardHeader><CardTitle>Contact Details</CardTitle></CardHeader>
               <CardContent className="space-y-2 text-sm text-muted-foreground">
                 <p>Email: info@sportsouryouth.org</p>
-                <p>Phone: (312) 555-0188</p>
+                <p>Phone: +1 (866) 582-0817</p>
                 <p className="pt-1 font-medium text-foreground">Address</p>
                 <p>Sports Our Youth Organization</p>
                 <p>1140 Ave of the Americas</p>

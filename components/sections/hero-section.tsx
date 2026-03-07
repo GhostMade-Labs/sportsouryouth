@@ -12,7 +12,7 @@ export function HeroSection() {
           <Badge className="bg-accent/20 text-accent-foreground">Youth Sports Fundraising</Badge>
           <h1 className="text-4xl font-bold leading-tight md:text-6xl">Give Every Young Athlete a Fair Shot.</h1>
           <p className="max-w-xl text-lg text-muted-foreground">
-            Remove financial barriers, strengthen youth programs, and build the next generation of community leaders through sports.
+            Rise up youth programs, and build the next generation of community leaders through sports.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link href="/donate"><Button variant="accent" size="lg">Donate Now</Button></Link>

@@ -4,34 +4,28 @@ import { programProfiles } from "@/lib/data";
 
 type ProgramCardVisual = {
   backgroundSrc: string;
-  emoji: string;
   objectPosition: string;
 };
 
 const programCardVisualById: Record<string, ProgramCardVisual> = {
   basketball: {
     backgroundSrc: "/images/program-cards/basketball-card-bg.png",
-    emoji: "🏀",
     objectPosition: "56% 46%",
   },
   football: {
     backgroundSrc: "/images/program-cards/football-card-bg.png",
-    emoji: "🏈",
     objectPosition: "52% 48%",
   },
   "baseball-girls-softball": {
     backgroundSrc: "/images/program-cards/baseball-softball-card-bg.png",
-    emoji: "⚾",
     objectPosition: "50% 50%",
   },
   soccer: {
-    backgroundSrc: "/images/program-cards/soccer-card-bg.png",
-    emoji: "⚽",
+    backgroundSrc: "/images/program-cards/soccer-card-bg.jpeg",
     objectPosition: "52% 46%",
   },
   hockey: {
     backgroundSrc: "/images/program-cards/hockey-card-bg.png",
-    emoji: "🏒",
     objectPosition: "50% 46%",
   },
 };
@@ -52,13 +46,10 @@ export function ProgramGrid() {
                 style={{ objectPosition: programCardVisualById[program.id]?.objectPosition ?? "50% 50%" }}
               />
               <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/35 to-black/75" />
-              <div className="relative z-10 flex h-full flex-col justify-between p-6 text-white">
+              <div className="relative z-10 flex h-full flex-col p-6 text-white">
                 <div className="space-y-2">
                   <h3 className="text-2xl font-semibold leading-tight">{program.sport}</h3>
                 </div>
-                <p className="text-5xl leading-none sm:text-6xl" aria-hidden="true">
-                  {programCardVisualById[program.id]?.emoji ?? "🏅"}
-                </p>
               </div>
             </div>
             <div className="p-6 lg:pr-8">

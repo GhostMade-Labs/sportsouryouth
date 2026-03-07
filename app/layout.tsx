@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Manrope, Sora } from "next/font/google";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { HelpWidget } from "@/components/layout/help-widget";
 import { CartProvider } from "@/components/store/cart-provider";
 import { CartDrawer } from "@/components/store/cart-drawer";
 import "./globals.css";
@@ -40,7 +39,6 @@ export default function RootLayout({
           <main className="min-h-screen pt-20">{children}</main>
           <SiteFooter />
           <CartDrawer />
-          <HelpWidget />
         </CartProvider>
       </body>
     </html>
