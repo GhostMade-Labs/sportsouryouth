@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import type { ArtworkCollection, Product } from "@/lib/data";
 import { artworkCollections } from "@/lib/data";
@@ -20,14 +20,80 @@ type ArtworkCardProps = {
   collection: ArtworkCollection;
 };
 
-type HoodieImageFrame = {
+type ProductImageFrame = {
   backgroundColor: string;
   imagePaddingClassName: string;
   objectPosition: string;
   scale: number;
+  offsetTopPx?: number;
 };
 
-const hoodieImageFrameById: Record<string, HoodieImageFrame> = {
+const tshirtImageFrameById: Record<string, ProductImageFrame> = {
+  "play-like-girl-tee": {
+    backgroundColor: "#fefaf7",
+    imagePaddingClassName: "p-4 sm:p-5",
+    objectPosition: "50% 49%",
+    scale: 0.94,
+  },
+  "softball-girl-neon-tee": {
+    backgroundColor: "#dfdeda",
+    imagePaddingClassName: "p-4 sm:p-5",
+    objectPosition: "50% 49%",
+    scale: 0.94,
+  },
+  "orange-arc-tee": {
+    backgroundColor: "#eae9e5",
+    imagePaddingClassName: "p-4 sm:p-5",
+    objectPosition: "50% 49%",
+    scale: 0.93,
+  },
+  "eat-sleep-basketball-repeat-tee": {
+    backgroundColor: "#f0ede6",
+    imagePaddingClassName: "p-4 sm:p-5",
+    objectPosition: "50% 49%",
+    scale: 0.94,
+  },
+  "hoop-lexicon-tee": {
+    backgroundColor: "#e0dfdb",
+    imagePaddingClassName: "p-4 sm:p-5",
+    objectPosition: "50% 49%",
+    scale: 0.94,
+  },
+  "neon-ice-breaker-tee": {
+    backgroundColor: "#fafafa",
+    imagePaddingClassName: "p-4 sm:p-5",
+    objectPosition: "50% 49%",
+    scale: 1.00,
+  },
+  "eat-hockey-sleep-repeat-tee": {
+    backgroundColor: "#fdfdfd",
+    imagePaddingClassName: "p-0 sm:p-0",
+    objectPosition: "50% 46%",
+    scale: 1.20,
+  },
+  "bring-it-usa-tee": {
+    backgroundColor: "#ecebe9",
+    imagePaddingClassName: "p-0 sm:p-1",
+    objectPosition: "50% 47%",
+    scale: 1.20,
+    offsetTopPx: 22,
+  },
+  "gridiron-splash-tee": {
+    backgroundColor: "#000000",
+    imagePaddingClassName: "p-0 sm:p-0",
+    objectPosition: "50% 50%",
+    scale: 1.20,
+    offsetTopPx: 28,
+  },
+  "be-legendary-tee": {
+    backgroundColor: "#000000",
+    imagePaddingClassName: "p-4 sm:p-5",
+    objectPosition: "50% 49%",
+    scale: 0.94,
+  },
+};
+
+const hoodieImageFrameById: Record<string, ProductImageFrame> = {
   "play-like-girl-hoodie": {
     backgroundColor: "#fefdfb",
     imagePaddingClassName: "p-1 sm:p-2",
@@ -72,19 +138,20 @@ function ArtworkCard({ collection }: ArtworkCardProps) {
   const product: Product = variant === "tee" ? collection.tshirt : collection.hoodie;
   const [size, setSize] = useState(product.sizes[0]);
   const color = product.colors[0];
-  const hoodieImageFrame = variant === "hoodie" ? hoodieImageFrameById[product.id] : undefined;
-  const shouldUseHoodieFrame = Boolean(hoodieImageFrame);
+  const productImageFrame = variant === "tee" ? tshirtImageFrameById[product.id] : hoodieImageFrameById[product.id];
+  const shouldUseImageFrame = Boolean(productImageFrame);
 
-  useEffect(() => {
-    setSize(product.sizes[0]);
-  }, [product.id, product.sizes]);
+  const handleVariantChange = (nextVariant: Variant) => {
+    setVariant(nextVariant);
+    setSize((nextVariant === "tee" ? collection.tshirt : collection.hoodie).sizes[0]);
+  };
 
   return (
     <Card className="h-full overflow-hidden border-border/70 bg-card shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
       <CardContent className="space-y-4 p-4">
         <div
           className="relative h-[21rem] overflow-hidden rounded-2xl border border-border/60 sm:h-[23rem]"
-          style={shouldUseHoodieFrame ? { backgroundColor: hoodieImageFrame?.backgroundColor } : undefined}
+          style={shouldUseImageFrame ? { backgroundColor: productImageFrame?.backgroundColor } : undefined}
         >
           <Image
             src={product.image}
@@ -93,15 +160,17 @@ function ArtworkCard({ collection }: ArtworkCardProps) {
             height={1536}
             className={cn(
               "h-full w-full",
-              shouldUseHoodieFrame
-                ? `object-contain ${hoodieImageFrame?.imagePaddingClassName ?? "p-1 sm:p-2"}`
+              shouldUseImageFrame
+                ? `object-contain ${productImageFrame?.imagePaddingClassName ?? "p-1 sm:p-2"}`
                 : "object-cover",
             )}
             style={
-              shouldUseHoodieFrame
+              shouldUseImageFrame
                 ? {
-                    objectPosition: hoodieImageFrame?.objectPosition ?? "50% 50%",
-                    transform: `scale(${hoodieImageFrame?.scale ?? 1})`,
+                    objectPosition: productImageFrame?.objectPosition ?? "50% 50%",
+                    transform: `scale(${productImageFrame?.scale ?? 1})`,
+                    position: productImageFrame?.offsetTopPx ? "relative" : undefined,
+                    top: productImageFrame?.offsetTopPx ? `${productImageFrame.offsetTopPx}px` : undefined,
                   }
                 : undefined
             }
@@ -126,7 +195,7 @@ function ArtworkCard({ collection }: ArtworkCardProps) {
             className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
               variant === "tee" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-card"
             }`}
-            onClick={() => setVariant("tee")}
+            onClick={() => handleVariantChange("tee")}
             aria-label={`Show ${collection.artworkName} T-Shirt`}
           >
             T-Shirt
@@ -136,7 +205,7 @@ function ArtworkCard({ collection }: ArtworkCardProps) {
             className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
               variant === "hoodie" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-card"
             }`}
-            onClick={() => setVariant("hoodie")}
+            onClick={() => handleVariantChange("hoodie")}
             aria-label={`Show ${collection.artworkName} Hoodie`}
           >
             Hoodie
